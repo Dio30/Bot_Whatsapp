@@ -1,1 +1,1 @@
-web: gunicorn whatsapp:app
+web: gunicorn teste2:app
