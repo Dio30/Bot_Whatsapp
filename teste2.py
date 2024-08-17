@@ -5,10 +5,10 @@ import json
 app = Flask(__name__)
 
 # Substitua pelo seu Access Token da API do WhatsApp
-access_token = 'EAAV12WyY078BO5qegE1ALOp6oFtYoaDYang9PmdZArk2nvysGT611nC5Kv91ooo2lTGgZA9rPuUZCSzt215jSdBNeLbaEa8MPccYakcj4i56AA0MCbnqDOetzR2ZCBnajBgW6pZCPMN88HVLruRPshshrxZBJXksIcEXm7ilZCOSWhcBwXtQWqsiTSZApScsb1N3RCpzZBCyfki84jhn7dN4ZD'
+access_token = 'EAAV12WyY078BO1R7h0iCDfwgUOZAIjpDcZBcZAcZByC799vsbMt9vdzsIyTZC3pSGRZBDDSFecSP9C1XkqmjkwQgPXLViMJqhrwkDAYMaeeMEBztlugTNk6jZBuiZC5UZBzRokxBcVLX2ZBYIxLuAliFhZCZCTIMz4uE5nqYq7TFYY2rJYvi57hsCyfF4NhN5JPbE7zNxKxIEdJZA1WAfftygMFwZD'
 
 # Substitua pelo seu ID de telefone do WhatsApp Business
-phone_number_id = '405104159346148'
+phone_number_id = '413045388554931'
 
 # URL para a API do WhatsApp
 whatsapp_api_url = f'https://graph.facebook.com/v16.0/{phone_number_id}/messages'
@@ -19,7 +19,7 @@ headers = {
     'Content-Type': 'application/json'
 }
 
-@app.route('/', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
     
