@@ -40,14 +40,13 @@ def webhook():
             # Dados da mensagem recebida
             messages = data['entry'][0]['changes'][0]['value']['messages'][0]
             message_text = messages['text']['body'] if 'text' in messages else None
-            sender_id = messages['from']  # O número do telefone do remetente
+            sender_id = '+5548984187674'  # O número do telefone do remetente
             
             # Lógica de resposta
             if message_text:
                 reply_text = f"Você disse: {message_text}"
                 send_message(sender_id, reply_text)
             print(sender_id)
-        print(sender_id)
         
         return jsonify({'status': 'success'}), 200
 
