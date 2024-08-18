@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import requests
 import json
 
@@ -54,13 +54,14 @@ def webhook():
             contacts = data['entry'][0]['changes'][0]['value'].get('contacts', [])
             user_name = contacts[0]['profile']['name'] if contacts else "Futuro Cliente"
 
-            if sender_id and message_text:
+            if sender_id and message_text == 'Sim'.lower():
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
-                reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id} e o seu nome é {user_name}"
+                reply_text = f"Voce pode falar com nossos atendentes {user_name} atraves desse link: https://wa.me/554898098694"
                 send_message(sender_id_com_nove, reply_text)
             else:
-                print("Número do remetente não encontrado.")
+                reply_text = "Não reconheci sua mensagem, tente novamente"
+                print("Não reconheci sua mensagem, tente novamente")
             
         return jsonify({'status': 'success'}), 200
 
@@ -79,6 +80,28 @@ def send_message(recipient_phone_number, message_text):
     # Exibindo a resposta da API
     print(response.status_code)
     print(response.json())
+
+@app.route('/')
+def home():
+    return render_template('index.html', status=None)
+
+@app.route('/enviar_mensagem', methods=['POST'])
+def send_custom_message():
+    phone_number = request.form.get('phone_number')
+    message_text = request.form.get('message')
+    status = None
+
+    if phone_number and message_text:
+        status_code = send_message(phone_number, message_text)
+        
+        if status_code == 200:
+            status = 'Mensagem enviada com sucesso!'
+      
+        return render_template('index.html', context={'status':status})
+    else:
+        status = 'Número de telefone ou mensagem ausente!'
+        
+    return render_template('index.html', context={'status':status})
 
 if __name__ == '__main__':
     # O webhook será exposto no localhost na porta 5000
