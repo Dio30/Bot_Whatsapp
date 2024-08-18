@@ -54,14 +54,14 @@ def webhook():
             contacts = data['entry'][0]['changes'][0]['value'].get('contacts', [])
             user_name = contacts[0]['profile']['name'] if contacts else "Futuro Cliente"
 
-            if sender_id or message_text == 'Sim' or message_text == 'sim':
+            if sender_id or messages['text']['body'] == 'Sim' or messages['text']['body'] == 'sim':
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
                 reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
                 send_message(sender_id_com_nove, reply_text)
             else:
-                reply_text = "Não reconheci sua mensagem, tente novamente"
-                print("Não reconheci sua mensagem, tente novamente")
+                reply_text = "Obrigado pela resposta, caso mude de ideia informe com um sim."
+                print("Obrigado pela resposta, caso mude de ideia informe com um sim.")
             
         return jsonify({'status': 'success'}), 200
 
