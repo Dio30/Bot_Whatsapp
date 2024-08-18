@@ -5,7 +5,7 @@ import json
 app = Flask(__name__)
 
 # Substitua pelo seu Access Token da API do WhatsApp
-access_token = 'EAAV12WyY078BOwcZCiJdiM0sTkNAvUKljzSMPFj2Sun5NzWYZCkEFW8Sq13gpNVhMvterY1MHWa3o1AptEtEXOxg5M9o5X62XfMn7rZCnIFXT74hKSCe4FWRZBj51PBT8VgPIFRogGPuFOqa2e99ZBZBBvugg2hfkXcGj0kngZATHiFkIbENaavDdiZAFXupiOsytzSy1tImZAz2Yk9pGtA0ZD'
+access_token = 'EAAV12WyY078BO6ZBEl09S35ZBiaOAcZAZAZAVeYpy58lpgwcCJ7FnURfRGS40SOcIYsoIoKYYABduE5VWtK1cVCUdqdZCbo7dSp37lmzFled7pfZBhHl2ZAogkEd8aZC8u9NhI1i7BPjKI3vtvl2vYZAmjcGZASN3g5fiZC3VZCtr120gcQLHvkZCYabtguAxRL1PBZBvfJYzISxggZB9VsOZC7D08mMZD'
 
 # Substitua pelo seu ID de telefone do WhatsApp Business
 phone_number_id = '405104159346148'
