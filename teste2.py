@@ -51,11 +51,13 @@ def webhook():
             messages = data['entry'][0]['changes'][0]['value']['messages'][0]
             message_text = messages['text']['body'] if 'text' in messages else None
             sender_id = messages['from']  # O número do telefone do remetente
+            contacts = data['entry'][0]['changes'][0]['value'].get('contacts', [])
+            user_name = contacts[0]['profile']['name'] if contacts else "Futuro Cliente"
 
             if sender_id and message_text:
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
-                reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id} e o seu nome é {messages['name']}"
+                reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id} e o seu nome é {user_name}"
                 send_message(sender_id_com_nove, reply_text)
             else:
                 print("Número do remetente não encontrado.")
