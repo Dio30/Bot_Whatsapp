@@ -34,17 +34,18 @@ def webhook():
     
     if request.method == 'POST':
         data = request.get_json()
+        print(json.dumps(data, indent=2))
         
         # Verifique se recebemos uma mensagem
         if 'messages' in data['entry'][0]['changes'][0]['value']:
             # Dados da mensagem recebida
             messages = data['entry'][0]['changes'][0]['value']['messages'][0]
             message_text = messages['text']['body'] if 'text' in messages else None
-            sender_id = '+5548984187674'  # O número do telefone do remetente
+            sender_id = messages['from']  # O número do telefone do remetente
             
             # Lógica de resposta
             if message_text:
-                reply_text = f"Você disse: {message_text}"
+                reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id}"
                 send_message(sender_id, reply_text)
             print(sender_id)
         
