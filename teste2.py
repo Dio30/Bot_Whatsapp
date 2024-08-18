@@ -5,13 +5,13 @@ import json
 app = Flask(__name__)
 
 # Substitua pelo seu Access Token da API do WhatsApp
-access_token = 'EAAV12WyY078BO1R7h0iCDfwgUOZAIjpDcZBcZAcZByC799vsbMt9vdzsIyTZC3pSGRZBDDSFecSP9C1XkqmjkwQgPXLViMJqhrwkDAYMaeeMEBztlugTNk6jZBuiZC5UZBzRokxBcVLX2ZBYIxLuAliFhZCZCTIMz4uE5nqYq7TFYY2rJYvi57hsCyfF4NhN5JPbE7zNxKxIEdJZA1WAfftygMFwZD'
+access_token = 'EAAV12WyY078BOwcZCiJdiM0sTkNAvUKljzSMPFj2Sun5NzWYZCkEFW8Sq13gpNVhMvterY1MHWa3o1AptEtEXOxg5M9o5X62XfMn7rZCnIFXT74hKSCe4FWRZBj51PBT8VgPIFRogGPuFOqa2e99ZBZBBvugg2hfkXcGj0kngZATHiFkIbENaavDdiZAFXupiOsytzSy1tImZAz2Yk9pGtA0ZD'
 
 # Substitua pelo seu ID de telefone do WhatsApp Business
-phone_number_id = '413045388554931'
+phone_number_id = '405104159346148'
 
 # URL para a API do WhatsApp
-whatsapp_api_url = f'https://graph.facebook.com/v16.0/{phone_number_id}/messages'
+whatsapp_api_url = f'https://graph.facebook.com/v20.0/{phone_number_id}/messages'
 
 # Cabeçalhos da requisição HTTP
 headers = {
@@ -19,7 +19,7 @@ headers = {
     'Content-Type': 'application/json'
 }
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     data = request.get_json()
     
