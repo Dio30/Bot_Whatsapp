@@ -19,6 +19,15 @@ headers = {
     'Content-Type': 'application/json'
 }
 
+def adicionar_digito_nove(numero):
+    # Verifica se o número tem 10 dígitos (formato DDD + número de 8 dígitos)
+    if numero.startswith("55") and len(numero) == 12:  # Com código do país (55)
+        numero = numero[:4] + "9" + numero[4:]  # Adiciona o 9 após o DDD
+    elif len(numero) == 10:  # Sem código do país
+        numero = numero[:2] + "9" + numero[2:]  # Adiciona o 9 após o DDD
+    
+    return numero
+
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     if request.method == 'GET':
@@ -42,13 +51,16 @@ def webhook():
             messages = data['entry'][0]['changes'][0]['value']['messages'][0]
             message_text = messages['text']['body'] if 'text' in messages else None
             sender_id = messages['from']  # O número do telefone do remetente
-            
-            # Lógica de resposta
-            if message_text:
+
+            if sender_id and message_text:
+                # Adiciona o dígito 9, se necessário
+                sender_id_com_nove = adicionar_digito_nove(sender_id)
                 reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id}"
-                send_message(sender_id, reply_text)
-            print(sender_id)
-        
+                send_message(sender_id_com_nove, reply_text)
+                print(f"Número do remetente com dígito 9: {sender_id_com_nove}")
+            else:
+                print("Número do remetente não encontrado.")
+            
         return jsonify({'status': 'success'}), 200
 
 def send_message(recipient_phone_number, message_text):
