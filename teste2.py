@@ -43,7 +43,7 @@ def webhook():
     
     if request.method == 'POST':
         data = request.get_json()
-        print(json.dumps(data, indent=2))
+        print(json.dumps(data))
         
         # Verifique se recebemos uma mensagem
         if 'messages' in data['entry'][0]['changes'][0]['value']:
@@ -55,9 +55,8 @@ def webhook():
             if sender_id and message_text:
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
-                reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id}"
+                reply_text = f"Parabens, voce recebeu a mensagem!!!!, seu numero é {sender_id} e o seu nome é {messages['name']}"
                 send_message(sender_id_com_nove, reply_text)
-                print(f"Número do remetente com dígito 9: {sender_id_com_nove}")
             else:
                 print("Número do remetente não encontrado.")
             
