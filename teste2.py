@@ -49,27 +49,31 @@ def webhook():
         if 'messages' in data['entry'][0]['changes'][0]['value']:
             # Dados da mensagem recebida
             messages = data['entry'][0]['changes'][0]['value']['messages'][0]
-            message_text = messages['text']['body'] if 'text' in messages else None # trazer texto se não None
+            message_text = messages['text']['body'].lower() if 'text' in messages else None # trazer texto se não None
             sender_id = messages['from']  # O número do telefone do remetente
             contacts = data['entry'][0]['changes'][0]['value'].get('contacts', [])
             user_name = contacts[0]['profile']['name'] if contacts else "Futuro Cliente"
-            
-            if message_text == 'Sim' or 'sim':
-                # Adiciona o dígito 9, se necessário
-                sender_id_com_nove = adicionar_digito_nove(sender_id)
-                reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
-                send_message(sender_id_com_nove, reply_text)
 
-            elif message_text == 'Não' or 'Nao':
-                sender_id_com_nove = adicionar_digito_nove(sender_id)
-                reply_text = f"Obrigado pelo retorno {user_name}, caso mude de ideia informe com um sim"
+            # Lógica de resposta com condicional
+            if message_text:
+                if "sim" in message_text:
+                    sender_id_com_nove = adicionar_digito_nove(sender_id)
+                    reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
+                    print(reply_text)
+
+                elif "nao" or "não" in message_text:
+                    sender_id_com_nove = adicionar_digito_nove(sender_id)
+                    reply_text = f"Obrigado pelo retorno {user_name}, caso mude de ideia informe com um sim"
+                    print(reply_text)
+                    
+                else:
+                    sender_id_com_nove = adicionar_digito_nove(sender_id)
+                    reply_text = "Responda com sim ou não por favor"
+                    print(reply_text)
+
                 send_message(sender_id_com_nove, reply_text)
-            else:
-                reply_text = "Obrigado pela resposta, caso mude de ideia informe com um sim."
-                print("Obrigado pela resposta, caso mude de ideia informe com um sim.")
-            
         return jsonify({'status': 'success'}), 200
-
+            
 def send_message(recipient_phone_number, message_text):
     payload = {
         "messaging_product": "whatsapp",
