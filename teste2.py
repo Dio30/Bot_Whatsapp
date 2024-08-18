@@ -49,16 +49,20 @@ def webhook():
         if 'messages' in data['entry'][0]['changes'][0]['value']:
             # Dados da mensagem recebida
             messages = data['entry'][0]['changes'][0]['value']['messages'][0]
-            message_text = messages['text']['body'] if 'text' in messages else None
+            message_text = messages['text']['body'] if 'text' in messages else None # trazer texto se não None
             sender_id = messages['from']  # O número do telefone do remetente
             contacts = data['entry'][0]['changes'][0]['value'].get('contacts', [])
             user_name = contacts[0]['profile']['name'] if contacts else "Futuro Cliente"
-            primeira_msg = messages['type']
-
-            if sender_id and primeira_msg == 'request_welcome':
+            
+            if message_text == 'Sim' or 'sim':
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
                 reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
+                send_message(sender_id_com_nove, reply_text)
+
+            elif message_text == 'Não' or 'Nao':
+                sender_id_com_nove = adicionar_digito_nove(sender_id)
+                reply_text = f"Obrigado pelo retorno {user_name}, caso mude de ideia informe com um sim"
                 send_message(sender_id_com_nove, reply_text)
             else:
                 reply_text = "Obrigado pela resposta, caso mude de ideia informe com um sim."
