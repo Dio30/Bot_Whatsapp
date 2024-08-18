@@ -8,7 +8,7 @@ app = Flask(__name__)
 access_token = 'EAAV12WyY078BO6ZBEl09S35ZBiaOAcZAZAZAVeYpy58lpgwcCJ7FnURfRGS40SOcIYsoIoKYYABduE5VWtK1cVCUdqdZCbo7dSp37lmzFled7pfZBhHl2ZAogkEd8aZC8u9NhI1i7BPjKI3vtvl2vYZAmjcGZASN3g5fiZC3VZCtr120gcQLHvkZCYabtguAxRL1PBZBvfJYzISxggZB9VsOZC7D08mMZD'
 
 # Substitua pelo seu ID de telefone do WhatsApp Business
-phone_number_id = '405104159346148'
+phone_number_id = '413045388554931'
 
 # URL para a API do WhatsApp
 whatsapp_api_url = f'https://graph.facebook.com/v20.0/{phone_number_id}/messages'
@@ -57,7 +57,7 @@ def webhook():
             if sender_id or message_text == 'Sim' or message_text == 'sim':
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
-                reply_text = f"Voce pode falar com nossos atendentes {user_name} atraves desse link: https://wa.me/554898098694"
+                reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
                 send_message(sender_id_com_nove, reply_text)
             else:
                 reply_text = "Não reconheci sua mensagem, tente novamente"

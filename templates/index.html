@@ -12,12 +12,12 @@
         <input type="text" id="phone_number" name="phone_number" placeholder="Insira seu numero aqui" value="+5548" required><br><br>
         
         <label for="message">Mensagem:</label><br>
-        <input type="text" id="message" name="message" placeholder="Digite sua mensagem aqui..." value="oi" required><br><br>
+        <input type="text" id="message" name="message" placeholder="Digite sua mensagem aqui..." value="Deseja receber nossas ofertas? Digite sim para saber mais" required><br><br>
         
         <input type="submit" value="Enviar Mensagem">
     </form>
 
-    {% if status %}
+    {% if status == 200 %}
         <p>{{ status }}</p>
     {% endif %}
 </body>
