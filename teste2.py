@@ -53,8 +53,9 @@ def webhook():
             sender_id = messages['from']  # O número do telefone do remetente
             contacts = data['entry'][0]['changes'][0]['value'].get('contacts', [])
             user_name = contacts[0]['profile']['name'] if contacts else "Futuro Cliente"
+            primeira_msg = messages['type']
 
-            if sender_id or messages['text']['body'] == 'Sim' or messages['text']['body'] == 'sim':
+            if sender_id and primeira_msg == 'request_welcome':
                 # Adiciona o dígito 9, se necessário
                 sender_id_com_nove = adicionar_digito_nove(sender_id)
                 reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
