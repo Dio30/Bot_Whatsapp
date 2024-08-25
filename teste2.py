@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, flash
 import requests
 import json
 
 app = Flask(__name__)
+app.secret_key = 'teste1234'
 
 # Substitua pelo seu Access Token da API do WhatsApp
 access_token = 'EAAV12WyY078BO0UxQdZCeyFXruZBBo7Ny6TBNWZBtyktAcdpDzmKjGcZCfym0KZCG7N0ra2rZBUg7D1kPB9ER45PIutJmV7EHhqYZBOo539sWGB5CuicrsJXKQaeFW5uZCZBaEbxQCl8cDCZCpdtkpTf2qzZCmQ8RUm3drtCfyCx4Ik45URb8exPRLNwn2YsfG4SMjxXQZDZD'
@@ -12,6 +13,7 @@ phone_number_id = '413045388554931'
 
 # URL para a API do WhatsApp
 whatsapp_api_url = f'https://graph.facebook.com/v20.0/{phone_number_id}/messages'
+templates_api_url = f'https://graph.facebook.com/v20.0/{phone_number_id}/message_templates'
 
 # Cabeçalhos da requisição HTTP
 headers = {
@@ -43,7 +45,6 @@ def webhook():
     
     if request.method == 'POST':
         data = request.get_json()
-        print(json.dumps(data))
         
         # Verifique se recebemos uma mensagem
         if 'messages' in data['entry'][0]['changes'][0]['value']:
@@ -56,62 +57,78 @@ def webhook():
 
             # Lógica de resposta com condicional
             if message_text:
-                if message_text == "sim".lower():
+                if message_text == "sim":
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
-                    print(reply_text)
 
-                elif message_text == "nao".lower() or message_text == "não".lower():
+                elif message_text in ["nao", "não"]:
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = f"Obrigado pelo retorno {user_name}, caso mude de ideia informe com um sim"
-                    print(reply_text)
 
                 else:
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = "Responda com sim ou não por favor"
-                    print(reply_text)
-
-                send_message(sender_id_com_nove, reply_text)
+                    
+                send_message(sender_id_com_nove, reply_text) # mensagem de retorno a mensagem do cliente
         return jsonify({'status': 'success'}), 200
             
-def send_message(recipient_phone_number, message_text):
-    payload = {
-        "messaging_product": "whatsapp",
-        "to": recipient_phone_number,
-        "type": "text",
-        "text": {
-            "body": message_text
+def send_message(recipient_phone_number, message_text=None, template_name=None):
+    if template_name:
+        payload = {
+            "messaging_product": "whatsapp",
+            "to": recipient_phone_number,
+            "type": "template",
+            "template": {
+                "name": template_name,
+                "language": {
+                    "code": "pt_BR"  # Código de linguagem para Português Brasileiro
+                },
+            }
         }
-    }
+    else:
+        payload = {
+            "messaging_product": "whatsapp",
+            "to": recipient_phone_number,
+            "type": "text",
+            "text": {
+                "body": message_text
+            }
+        }
     
     response = requests.post(whatsapp_api_url, headers=headers, data=json.dumps(payload))
-    
-    # Exibindo a resposta da API
     print(response.status_code)
     print(response.json())
 
-@app.route('/')
-def home():
-    return render_template('index.html', status=None)
+def get_templates():
+    response = requests.get(templates_api_url, headers=headers)
+    print(response.json())
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
 
 @app.route('/enviar_mensagem', methods=['POST'])
 def send_custom_message():
     phone_number = request.form.get('phone_number')
-    message_text = request.form.get('message')
-    status = None
+    template_name = 'iniciar_conversa'
+    response = requests.get(templates_api_url, headers=headers)
 
-    if phone_number and message_text:
-        status_code = send_message(phone_number, message_text)
+    if phone_number and template_name:
+        send_message(phone_number, template_name=template_name)
         
-        if status_code == 200:
-            status = 'Mensagem enviada com sucesso!'
-      
-        return render_template('index.html', context={'status':status})
+        if response.status_code == 200:
+            flash(f'Mensagem enviada com sucesso!!', 'success')
+        else:
+            flash('Falha ao enviar a mensagem!', 'danger')
     else:
-        status = 'Número de telefone ou mensagem ausente!'
+        flash('Número de telefone ou modelo de mensagem ausente!', 'warning')
         
-    return render_template('index.html', context={'status':status})
+    return render_template('index.html')
+
+@app.route('/')
+def home():
+    return render_template('index.html', templates=get_templates())
 
 if __name__ == '__main__':
     # O webhook será exposto no localhost na porta 5000
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
