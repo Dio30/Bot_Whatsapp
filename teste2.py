@@ -56,17 +56,17 @@ def webhook():
 
             # Lógica de resposta com condicional
             if message_text:
-                if "sim".lower() in message_text:
+                if message_text == "sim".lower():
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
                     print(reply_text)
 
-                elif "nao".lower() or "não".lower() in message_text:
+                elif message_text == "nao".lower() or message_text == "não".lower():
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = f"Obrigado pelo retorno {user_name}, caso mude de ideia informe com um sim"
                     print(reply_text)
 
-                elif not "nao".lower() or "não".lower() or "sim".lower() in message_text:
+                else:
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = "Responda com sim ou não por favor"
                     print(reply_text)
