@@ -22,9 +22,9 @@
     <br>
     <form action="/enviar_mensagem" method="POST">
         <div class="form-label-group">
-            <label for="phone_number">Número de Telefone para quem deseja enviar mensagem(com DDD e Código do País):</label><br>
-            <input type="text" id="phone_number" class="form-control " name="phone_number" style="width: 350px;" placeholder="Insira seu numero aqui" value="+55489" 
-            maxlength="14" required><br><br>
+            <label for="phone_number">Número de Telefone para quem deseja enviar mensagem:</label><br>
+            <input type="text" id="phone_number" class="form-control " name="phone_number" style="width: 350px;" placeholder="Insira seu numero aqui" 
+            required><br><br>
             
             <button type="submit" class="btn-primary">Enviar Mensagem</button>
             <p><a href="/" type="button" class="btn-primary">Voltar a pagina principal</a></p>
@@ -45,6 +45,27 @@
     {% else %}
         <p>Nenhuma mensagem recebida ainda.</p>
     {% endif %}
+
+    <script>
+        const phoneInput = document.getElementById('phone_number');
+
+        phoneInput.addEventListener('input', function(event) {
+            let input = event.target.value;
+
+            // Remover espaços extras
+            input = input.replace(/\s+/g, '');
+
+            // Verifica se o input tem 13 caracteres (11 dígitos + código do país "55") ou 12 (sem código do país)
+            const numeros = input.split(','); // Dividindo por vírgula para ver o último número
+
+            const ultimoNumero = numeros[numeros.length - 1].trim(); // Último número digitado
+
+            if (ultimoNumero.length === 8) {
+                // Adiciona uma vírgula e um espaço automaticamente
+                event.target.value = input + ', ';
+            }
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

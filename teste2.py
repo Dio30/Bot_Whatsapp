@@ -30,6 +30,8 @@ def adicionar_digito_nove(numero):
     elif len(numero) == 10:  # Sem código do país
         numero = numero[:2] + "9" + numero[2:]  # Adiciona o 9 após o DDD
     
+    numero = "+55489" + numero
+    
     return numero
 
 @app.route('/webhook', methods=['GET', 'POST'])
@@ -114,17 +116,23 @@ def send_message(recipient_phone_number, message_text=None, template_name=None):
 def send_custom_message():
     phone_number = request.form.get('phone_number')
     template_name = 'iniciar_conversa'
-    response = requests.post(templates_api_url, headers=headers)
+    response_status = []
 
     if phone_number and template_name:
-        send_message(phone_number, template_name=template_name)
+        phone_numbers_list = [numero.strip() for numero in phone_number.split(',')]
+
+        for phone_number in phone_numbers_list:
+            response = send_message(phone_number, template_name=template_name)
+            if response.get('error'):
+                response_status.append(f'Falha ao enviar para {phone_number}: {response["error"]["message"]}')
+            else:
+                response_status.append(f'Mensagem enviada com sucesso para {phone_number}!')
         
-        if response.status_code == 400:
-            flash(f'Mensagem enviada com sucesso!!', 'success')
-        else:
-            flash('Falha ao enviar a mensagem!!', 'danger')
+        for status in response_status:
+            flash(status, 'success' if 'sucesso' in status else 'danger')
+    
     else:
-        flash('Número de telefone ausente!!', 'warning')
+        flash('Números de telefone ou template ausente!', 'warning')
         
     return render_template('index.html')
 
