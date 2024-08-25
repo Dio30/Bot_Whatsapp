@@ -1,0 +1,10 @@
+body{
+    background-color: aqua;
+}
+
+.form-label-group input { /* suporte para o login dinamico */
+    height: 2rem;
+    border-radius: 5px;
+    padding-right: 4rem;
+    initial-letter-align: left;
+  }

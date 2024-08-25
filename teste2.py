@@ -5,7 +5,7 @@ import json
 app = Flask(__name__)
 
 # Substitua pelo seu Access Token da API do WhatsApp
-access_token = 'EAAV12WyY078BOzvmpQy3fRYsNyKf0LbqYIgKgoebP4ZAOS1ZBjJqrZB2fM6xxo3DTc1kaiOd0NZCg7JiiRTfNqnldH67f1CxFcIfM1dr0To8EsqBVrL8fOokXrtnoQvjh4bbiBBpZBJZC8ZBeYohlbW8DWQmV26mlt4ZACerMVrFWUDqcKxEFOYiSq3claNSQ4ZAmVKIu6ZChwBboZCL84l6hKX'
+access_token = 'EAAV12WyY078BO0UxQdZCeyFXruZBBo7Ny6TBNWZBtyktAcdpDzmKjGcZCfym0KZCG7N0ra2rZBUg7D1kPB9ER45PIutJmV7EHhqYZBOo539sWGB5CuicrsJXKQaeFW5uZCZBaEbxQCl8cDCZCpdtkpTf2qzZCmQ8RUm3drtCfyCx4Ik45URb8exPRLNwn2YsfG4SMjxXQZDZD'
 
 # Substitua pelo seu ID de telefone do WhatsApp Business
 phone_number_id = '413045388554931'
@@ -65,7 +65,7 @@ def webhook():
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = f"Obrigado pelo retorno {user_name}, caso mude de ideia informe com um sim"
                     print(reply_text)
-                    
+
                 else:
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = "Responda com sim ou não por favor"

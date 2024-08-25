@@ -4,21 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviar Mensagem WhatsApp</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
 </head>
 <body>
+<div class="container">
     <h1>Enviar Mensagem para WhatsApp</h1>
     <form action="/enviar_mensagem" method="POST">
-        <label for="phone_number">Número de Telefone (com DDD e Código do País):</label><br>
-        <input type="text" id="phone_number" name="phone_number" placeholder="Insira seu numero aqui" value="+5548" required><br><br>
-        
-        <label for="message">Mensagem:</label><br>
-        <input type="text" id="message" name="message" placeholder="Digite sua mensagem aqui..." value="Deseja receber nossas ofertas? Digite sim para saber mais" required><br><br>
-        
-        <input type="submit" value="Enviar Mensagem">
+        <div class="form-label-group">
+            <label for="phone_number">Número de Telefone para quem deseja enviar mensagem(com DDD e Código do País):</label><br>
+            <input type="text" id="phone_number" class="form-control " name="phone_number" style="width: 350px;" placeholder="Insira seu numero aqui" value="+55489" required><br><br>
+            
+            <label for="message">Mensagem:</label><br>
+            <input type="text" id="message" name="message" class="form-control" style="width: 350px;" placeholder="Digite sua mensagem aqui..." value="Deseja receber nossas ofertas? Digite sim para saber mais" required><br><br>
+            
+            <button type="submit">Enviar Mensagem</button>
+        </div>
     </form>
+</div>
 
     {% if status == 200 %}
         <p>{{ status }}</p>
     {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
