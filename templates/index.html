@@ -23,13 +23,28 @@
     <form action="/enviar_mensagem" method="POST">
         <div class="form-label-group">
             <label for="phone_number">Número de Telefone para quem deseja enviar mensagem(com DDD e Código do País):</label><br>
-            <input type="text" id="phone_number" class="form-control " name="phone_number" style="width: 350px;" placeholder="Insira seu numero aqui" value="+55489" required><br><br>
+            <input type="text" id="phone_number" class="form-control " name="phone_number" style="width: 350px;" placeholder="Insira seu numero aqui" value="+55489" 
+            maxlength="14" required><br><br>
             
             <button type="submit" class="btn-primary">Enviar Mensagem</button>
             <p><a href="/" type="button" class="btn-primary">Voltar a pagina principal</a></p>
         </div>
     </form>
 </div>
+
+<h1>Mensagens Recebidas</h1>
+    {% if received_messages %}
+        <ul>
+            {% for message in received_messages %}
+            <li>
+                <strong>De:</strong> {{ message.sender_id }} ({{ message.user_name }})<br>
+                <strong>Mensagem:</strong> {{ message.message_text }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma mensagem recebida ainda.</p>
+    {% endif %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

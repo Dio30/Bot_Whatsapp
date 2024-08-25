@@ -21,6 +21,8 @@ headers = {
     'Content-Type': 'application/json'
 }
 
+received_messages = []
+
 def adicionar_digito_nove(numero):
     # Verifica se o número tem 10 dígitos (formato DDD + número de 8 dígitos)
     if numero.startswith("55") and len(numero) == 12:  # Com código do país (55)
@@ -45,6 +47,7 @@ def webhook():
     
     if request.method == 'POST':
         data = request.get_json()
+        print(data)
         
         # Verifique se recebemos uma mensagem
         if 'messages' in data['entry'][0]['changes'][0]['value']:
@@ -57,6 +60,14 @@ def webhook():
 
             # Lógica de resposta com condicional
             if message_text:
+                received_messages.append({
+                    'sender_id': sender_id,
+                    'user_name': user_name,
+                    'message_text': message_text
+                    })
+                
+                print("Mensagens armazenadas:", received_messages)
+
                 if message_text == "sim":
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
                     reply_text = f"{user_name}, você pode falar com nossos atendentes através desse link: https://wa.me/554898098694"
@@ -67,9 +78,10 @@ def webhook():
 
                 else:
                     sender_id_com_nove = adicionar_digito_nove(sender_id)
-                    reply_text = "Responda com sim ou não por favor"
+                    reply_text = "Só entendo respostas como sim ou não."
                     
                 send_message(sender_id_com_nove, reply_text) # mensagem de retorno a mensagem do cliente
+
         return jsonify({'status': 'success'}), 200
             
 def send_message(recipient_phone_number, message_text=None, template_name=None):
@@ -98,13 +110,6 @@ def send_message(recipient_phone_number, message_text=None, template_name=None):
     response = requests.post(whatsapp_api_url, headers=headers, data=json.dumps(payload))
     return response.json()
 
-def get_templates():
-    response = requests.get(templates_api_url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return []
-
 @app.route('/enviar_mensagem', methods=['POST'])
 def send_custom_message():
     phone_number = request.form.get('phone_number')
@@ -117,15 +122,15 @@ def send_custom_message():
         if response.status_code == 400:
             flash(f'Mensagem enviada com sucesso!!', 'success')
         else:
-            flash('Falha ao enviar a mensagem!', 'danger')
+            flash('Falha ao enviar a mensagem!!', 'danger')
     else:
         flash('Número de telefone ausente!!', 'warning')
         
     return render_template('index.html')
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def home():
-    return render_template('index.html', templates=get_templates())
+    return render_template('index.html', received_messages=received_messages)
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5000)
