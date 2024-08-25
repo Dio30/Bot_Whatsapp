@@ -8,3 +8,21 @@ body{
     padding-right: 4rem;
     initial-letter-align: left;
   }
+
+.alert-success {
+    color: #47ad07;
+    font-size: 110%;
+    font-weight: bolder;
+}
+
+.alert-danger {
+    color: #c61007;
+    font-size: 110%;
+    font-weight: bolder;
+}
+
+.alert-warning{
+    color: #d4d705;
+    font-size: 110%;
+    font-weight: bolder;
+}

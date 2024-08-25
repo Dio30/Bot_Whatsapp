@@ -96,12 +96,10 @@ def send_message(recipient_phone_number, message_text=None, template_name=None):
         }
     
     response = requests.post(whatsapp_api_url, headers=headers, data=json.dumps(payload))
-    print(response.status_code)
-    print(response.json())
+    return response.json()
 
 def get_templates():
     response = requests.get(templates_api_url, headers=headers)
-    print(response.json())
     if response.status_code == 200:
         return response.json()
     else:
@@ -111,24 +109,23 @@ def get_templates():
 def send_custom_message():
     phone_number = request.form.get('phone_number')
     template_name = 'iniciar_conversa'
-    response = requests.get(templates_api_url, headers=headers)
+    response = requests.post(templates_api_url, headers=headers)
 
     if phone_number and template_name:
         send_message(phone_number, template_name=template_name)
         
-        if response.status_code == 200:
+        if response.status_code == 400:
             flash(f'Mensagem enviada com sucesso!!', 'success')
         else:
             flash('Falha ao enviar a mensagem!', 'danger')
     else:
-        flash('Número de telefone ou modelo de mensagem ausente!', 'warning')
+        flash('Número de telefone ausente!!', 'warning')
         
     return render_template('index.html')
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('index.html', templates=get_templates())
 
 if __name__ == '__main__':
-    # O webhook será exposto no localhost na porta 5000
     app.run(port=5000, debug=True)
